@@ -1,25 +1,176 @@
 ---
-title: "Untitled"
-output: html_document
+title: "Package Shiny"
 date: "2023-09-18"
+output: 
+  html_document:
+    toc: true
+    number_sections: true
+    toc_float: true
+    theme: yeti
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+# Apa itu package Shiny?
+
+
+Package R (Shiny) merupakan package yang digunakan untuk membangung web interaktif menggunakan software R.
+
+Package Shiny akan mengandung single script yang disebut dengan`app.R`. 
+
+`app.R` memiliki tiga komponen dasar, yaitu:
+
++ a user interface object (tampilan muka web)
+
++ a server function (server R berupa bentuk kodingan dalam membaca data)
+
++ a call to the `shinyApp` function (fungsi untuk menjalankan user interface dengan server function dalam menghasilkan web alternatif)
+
+
+# Build a user interface
+
+
+Pada bagian ini akan membangun user interface menggunakan app. Kita kan pelajari bagaimana menampilkan user interface lalu menambahkan text, gambar, dan elemen HTML lainnya ke Shiny app.
+
+
+``` {r}
+# Minimal format dalam menjalan kan Shiny (Halaman kosong dalam bentuk HTML)
+library(shiny)
+
+# Define UI ----
+ui <- fluidPage(
+  
+)
+
+# Define server logic ----
+server <- function(input, output) {
+  
+}
+
+# Run the app ----
+shinyApp(ui = ui, server = server)
+```
+
+
+## Layout
+
+
+Shiny menggungakan fungsi `fluidPage` untuk membuat tampilan yang secara otomatis akan menyesuaikan dimensi dari jendela browser. Untuk me-layout user interface pada Shiny adalah dengan menggunakan fungsi `fluidPage`.
+
+
+Contoh, fugnsi `ui` dibawah akan membuat user interface yang memiliki panel title dan layout sidebar pada tampilan web, dimana layout sidebar terdiri dari sidebar panel dan main panel. Kedua elemen tersebut ada berada dalam fugnsi `fluidPage`.
+
+```{r}
+ui <- fluidPage(
+  titlePanel("title panel"),
+
+  sidebarLayout(
+    sidebarPanel("sidebar panel"),
+    mainPanel("main panel")
+  )
+)
+
+# Define server logic ----
+server <- function(input, output) {
+  
+}
+
+# Run the app ----
+shinyApp(ui = ui, server = server)
+```
+
+
+`titlePanel` dan `sidebarLayout` adalah dua elemen yang sering digunakan dalam menggunakan fungsi `fluidPage`. Hal tersebut merupakan Shiny app dasar dengan menggunakan sidebar.
+
+
+`sidebarLayout` selalu menggunakn dua argumen:
+
++ fungsi `sidebarPanel` 
++ fungsi `mainPanel`
+
+
+Secara default `sidebarPanel` akan berada disebelah kiri, untuk mengubah posisi `sidebarPanel` dapat dilakukan dengan mengisi opsi argumen menjadi rigt (`position="right"`)
+
+
+``` {r}
+ui <- fluidPage(
+  titlePanel("title panel"),
+  
+  sidebarLayout(position = "right",
+                sidebarPanel("sidebar panel"),
+                mainPanel("main panel")
+  )
+)
+
+# Define server logic ----
+server <- function(input, output) {
+  
+}
+
+# Run the app ----
+shinyApp(ui = ui, server = server)
+```
+
+
+Selain argumen `titlePanel` dan `sidebarLayout`, dapat juga membuat layout yang lebih advanced dengan menggunakan argumen `navbarPage`. Argumen tersebut dapat memberikan multi-page user interface yang mengandung navigasi bar. 
+
+Atau dapat menggunakan `fluidRow` dan `column` untuk membuat layout dengan menggunakan sistem grid. 
+
+
+## HTML
+
+
+Pada Shiny app dapat ditambahkan konten didalam fungsi `*Panel`. Sebagai contoh pada argumen sebelumnya seperti fungsi `sidebarPanel` menampilkan karakter string.
+
+Berikut merupakan `tag` yang dapat digunakan untuk menambah konten pada shiny yang berbasis html:
+
+ Shiny Function   HTML5 equivalent    creates
+ ---------------- ------------------ -------------------------------------------------
+     `p`              `<p>`          membuat tulisan paragraf
+     `h1`             `<h1>`         Header tingkat 1
+     `h2`             `<h2>`         Header tingkat 2
+     `h3`             `<h3>`         Header tingkat 3
+     `h4`             `<h4>`         Header tingkat 4
+     `h5`             `<h5>`         Header tingkat 5
+     `h6`             `<h6>`         Header tingkat 6
+     `a`              `<a>`          Sebuah tautan link
+     `br`             `<br>`         Spasi satu baris
+     `div`            `<div>`        A division of text with a unform style
+     `span`           `<span>`       An in-line division of text with a uniform style
+     `pre`            `<pre>`        Text `as is` in a fixed width font
+     `code`           `<code>`       A formatted block code
+     `img`           `<img>`         Untuk memasukkan sebuah gambar
+     `strong`        `<strong>`      Bold Text
+     `em`            `<em>`          italicized text
+     `HTML`                          Directly passws a character string as HTML code
+     
+
+## Image
+
+
+To insert image, dapat dilakukan dengan membuat argumen `img(src="my_image.png")`. Fungsi dari `img` membutuhkan folder khusus untuk menyimpan gambar, dimana daplam script `app.R` folder tersebut harus dinamakan dengan `www`
+
+
+## Implementasi Penggunaan Shiny
+
+
+
 ``` {r}
 # Define UI ---------
 ui <- fluidPage(
-  titlePanel("My Shiny App"),
+  titlePanel("My Shiny App"), # merupakan judul template html
   
-  sidebarLayout(position = "right",
+  sidebarLayout(position = "right",# posisi sidebar ada disebelah kanan
     sidebarPanel(
-      h3("Installation", align="left"),
-      p("Shiny is availabel on CRAN, so you can install it in the usual way from your R console:"),
-      code("install.packages(\"shiny\")"), br(), br(), br(), br(), br(), br(),
-      img(src = "rstudio.png", height = 70, width = 200),
-      p("Shiny is product of", span("RStudio", style="color:blue"))),
+      h3("Installation", align="left"), # posisi tulisan rata kiri
+      p("Shiny is availabel on CRAN, so you can install it in the usual way from your R console:"), # merupakan paragraph biasa
+      code("install.packages(\"shiny\")"), # merupakan tulisan code
+      br(), br(), br(), br(), br(), br(), # spasi kebawah
+      img(src = "www/rstudio.png", height = 70, width = 200), # insert gambar 
+      p("Shiny is product of", span("RStudio", style="color:blue"))), # span: memasukkan kalimat dengan stle uniform
     mainPanel(
             h2("Introducing Shiny"),
             p("Shiny is  a new package from RStudio that makes it ", em("incredibly easy"), "to build interactive web applications with R."), 
@@ -27,7 +178,7 @@ ui <- fluidPage(
             br(), br(), br(),
             h3("Features"),
             p("- Build userful web aplications with only a few lines of code—no Javascript required."),
-            p("- Shiny application are automatically 'live' in the same way that", strong("spreadsheet"), "are live. Outputs change instantly as users modify inputs, without requiring a reload of the browser") 
+            p("- Shiny application are automatically 'live' in the same way that", strong("spreadsheet"), "are live. Outputs change instantly as users modify inputs, without requiring a reload of the browser") # strong memasukkan kata bold hitam
     )
   )
 )
@@ -42,3 +193,5 @@ server <-  function(input, output) {
 # Run the app ----
 shinyApp(ui = ui, server = server)
 ```
+
+
